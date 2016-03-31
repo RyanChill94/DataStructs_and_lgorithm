@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #ul1 {
+            height: auto;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 1px solid #000000;
+            border-right: none;;
+            border-bottom: none;
+        }
+
+        #ul1 li {
+            list-style: none;
+            float: left;
+            border: 1px solid #000000;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+<ul id="ul1">
+</ul>
+<script>
+    var oUl = document.getElementById('ul1');
+    var aLi = oUl.getElementsByTagName('li');
+    var iCount = 0;
+    //定义每个单元格大小
+    var SIZE_GRID = 60;
+    //皇后数量
+    var NUM_OF_QUEEN = 8;
+    //每次的结果
+    var posArr = [];
+    //结果数组
+    var posArrAll = [];
+
+    init();
+
+    function init() {
+        createGrid();
+        setQueen(0);
+        //console.log(iCount);
+        //console.log(posArrAll);
+        showQueen_next();
+    }
+
+
+    //创建单元格
+    function createGrid() {
+        var len = NUM_OF_QUEEN * NUM_OF_QUEEN;
+        oUl.style.width = NUM_OF_QUEEN * (SIZE_GRID + 1) + 'px';
+        for (var i = 0; i < len; i++) {
+            var oLi = document.createElement('li');
+            oLi.style.height = SIZE_GRID + 'px';
+            oLi.style.width = SIZE_GRID + 'px';
+            oLi.index = -1;
+            //oLi.innerHTML = oLi.index;
+            oUl.appendChild(oLi);
+        }
+
+        for (var i = 0; i < NUM_OF_QUEEN; i++) {
+            for (var j = 0; j < NUM_OF_QUEEN; j++) {
+                //挂载每个单元格的坐标
+                aLi[i * NUM_OF_QUEEN + j].x = j;
+                aLi[i * NUM_OF_QUEEN + j].y = i;
+                aLi[i * NUM_OF_QUEEN + j].innerHTML = '(' + j + ',' + i + ')';
+            }
+        }
+    }
+
+    //设置皇后位置
+    function setQueen(iQueen) {
+        //所有皇后放置完毕，情况成立，找到一组可行解
+        if (iQueen === NUM_OF_QUEEN) {
+            posArrAll.push(posArr.slice(0));
+            iCount++;
+            return;
+        }
+
+        for (var i = 0; i < NUM_OF_QUEEN; i++) {
+            if (aLi[iQueen * NUM_OF_QUEEN + i].index == -1) {
+                //选中元素下标置为零
+                aLi[iQueen * NUM_OF_QUEEN + i].index = iQueen;
+                //aLi[iQueen * NUM_OF_QUEEN + i].innerHTML = iQueen;
+                posArr.push(aLi[iQueen * NUM_OF_QUEEN + i]);
+
+                //读取坐标
+                var x = aLi[iQueen * NUM_OF_QUEEN + i].x;
+                var y = aLi[iQueen * NUM_OF_QUEEN + i].y;
+
+                for (var j = 0, len = aLi.length; j < len; j++) {
+                    if (aLi[j].index == -1 && ( aLi[j].x == x || aLi[j].y == y || aLi[j].x + aLi[j].y == x + y || aLi[j].x - aLi[j].y == x - y  )) {
+                        aLi[j].index = iQueen;
+                    }
+                }
+
+                setQueen(iQueen + 1);
+
+                //回溯
+                posArr.pop();
+                for (var j = 0; j < aLi.length; j++) {
+                    if (aLi[j].index == iQueen) {
+                        aLi[j].index = -1;
+                    }
+                }
+            }
+        }
+    }
+
+    //依次显示可行解
+    function showQueen_next() {
+        var iNow = 0;
+        show();
+        setInterval(show, 2000);
+
+        function show() {
+            for (var i = 0; i < aLi.length; i++) {
+                aLi[i].style.background = '';
+            }
+            now = posArrAll[iNow];
+
+            for (var i = 0; i < now.length; i++) {
+                now[i].style.background = 'red';
+            }
+            if (iNow < posArrAll.length - 1) {
+                iNow++
+            } else {
+                iNow = 0;
+            }
+        }
+    }
+
+
+    //随机显示可行解
+    function showQueen_random() {
+
+        change();
+        setInterval(change, 2000);
+
+        function change() {
+            for (var i = 0; i < aLi.length; i++) {
+                aLi[i].style.background = '';
+            }
+            var randomNum = Math.floor(posArrAll.length * Math.random());
+            var randomLi = posArrAll[randomNum];
+            //console.log(randomNum);
+            // console.log(randomLi);
+
+            for (var i = 0; i < randomLi.length; i++) {
+                randomLi[i].style.background = 'red';
+            }
+        }
+    }
+
+
+</script>
+</body>
+</html>
