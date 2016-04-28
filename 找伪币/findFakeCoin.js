@@ -4,7 +4,7 @@
 
 //生成硬币
 function makeCoin() {
-    var COIN_NUM = 8;
+    var COIN_NUM = 16;
     var arr = [];
     var trueWeight = random(70, 80);
     var fakeWeight = trueWeight - random(1, 5);
@@ -41,7 +41,7 @@ function findFakeCoin(arr) {
     } else {
         nextArray = right.slice(0);
     }
-    //console.log('下一个数组 ' + nextArray);
+    console.log('下一个数组 ' + nextArray);
     return findFakeCoin(nextArray);
 
     function sumWeight(aWeight) {

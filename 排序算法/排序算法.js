@@ -76,8 +76,8 @@ function quickSort(arr) {
 
 
 /*测试用例*/
-arr = [3, 4, 5, 8, 68];
+arr = [3, 4, 5, 8];
 console.log(bubbleSort(arr));
 //递归写法都改变了原数组,会造成冲突
-console.log(selSort(arr));
+//console.log(selSort(arr));
 console.log(quickSort(arr));
