@@ -1,20 +1,25 @@
+// oo版本
+
 /**
- * Created by Ryanchill on 2016/4/28.
- */
-
+ * @desc: 生成一个指定规模的螺旋矩阵
+ * @param {object} opt : 生成矩阵的初始化参数
+ *  opt.parent   :　指定父级
+ *  opt.col      :  每一行的列数
+ *  opt.sizeGrid :  每一个单元格大小
+ * */
 function SpiralMatrix(opt) {
-    this.NUM_COL = opt.col || 5;
-    this.sizeGrid = opt.sizeGrid || 50;
-    this.LENGTH = this.NUM_COL * this.NUM_COL;
     this.oUl = document.getElementById(opt.parent);
-    this.aLi = oUl.getElementsByTagName("li");
-    this.col = 0;
-    this.row = 0;
-    this.min = 0;
-    this.max = this.NUM_COL - 1;
+    this.aLi = this.oUl.getElementsByTagName("li");
+    this.NUM_COL = opt.col;
+    this.LENGTH = this.NUM_COL * this.NUM_COL;
+    this.SIZE_GRID = opt.sizeGrid;
 
-    //this.makeArray = makeArray;
-    this.oUl.style.width = (this.sizeGrid + 1) * this.NUM_COL + 'px';
+}
+
+SpiralMatrix.prototype.makeArray = function () {
+
+    //生成网格
+    this.oUl.style.width = (this.SIZE_GRID + 1) * this.NUM_COL + 'px';
 
     for (var i = 0; i < this.LENGTH; i++) {
         var li = document.createElement("li");
@@ -22,33 +27,31 @@ function SpiralMatrix(opt) {
         li.style.height = this.SIZE_GRID + 'px';
         this.oUl.appendChild(li);
     }
-    //this.showNum = showNum;
+};
+
+SpiralMatrix.prototype.makeNum = function () {
+    //设定特殊拐点
+    var col = 0;
+    var row = 0;
+    var min = 0;
+    var max = this.NUM_COL - 1;
     for (var i = 0; i < this.LENGTH; i++) {
-        this.aLi[this.row * this.NUM_COL + this.col].innerHTML = i;
-        if (this.row == this.min && this.col < this.max) {
-            this.col ++;
+        this.aLi[row * this.NUM_COL + col].innerHTML = i;
+        if (row == min && col < max) {
+            col = col + 1;
         } else if (col == max && row < max) {
-            this.row ++;
+            row = row + 1;
         } else if (row == max && col > min) {
-            this.col --;
+            col = col - 1;
         } else if (col == min && row > min) {
-            this.row --;
+            row = row - 1;
         }
 
         //缩短环数
-        if (this.row - 1 == this.min && this.col == this.min) {
-            this.min = this.min + 1;
-            this.max = this.max - 1;
+        if (row - 1 == min && col == min) {
+            min = min + 1;
+            max = max - 1;
         }
+
     }
-}
-
-function makeArray() {
-
-    alert("1211111");
-
-}
-
-function showNum() {
-
-}
+};
