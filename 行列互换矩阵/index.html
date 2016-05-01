@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #btn{
+            background: dodgerblue;
+            color: #ffffff;
+            font-size: 15px;
+            width: 80px;
+            height: 30px;
+            margin: 10px auto;
+            display: block;
+        }
+
+        #ul1 {
+            margin: 20px auto;
+            border: 1px solid #cccccc;
+            border-left: none;
+            border-bottom: none;
+            overflow: hidden;
+        }
+
+        #ul1 li {
+            border: 1px solid #cccccc;
+            border-right: none;
+            border-top: none;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<ul id="ul1"></ul>
+<input type="button" id="btn" value="行列交换"/>
+</body>
+<script>
+    window.onload = function () {
+        var arrTranslate = new ChangeXY({
+            parent: "ul1",
+            size: 10,
+            sizeGrid: 50
+        });
+
+        var oBtn = document.getElementById("btn");
+
+        arrTranslate.makeArray();
+        oBtn.onclick =  function(){
+            arrTranslate.display();
+        };
+
+
+
+
+    };
+
+    function ChangeXY(opt) {
+        this.oUl = document.getElementById(opt.parent);
+        this.aLi = this.oUl.getElementsByTagName('li');
+        this.size = opt.size || 5;
+        this.len = this.size * this.size;
+        this.sizeGrid = opt.sizeGrid || 50;
+        this.arr = [];
+    }
+
+    ChangeXY.prototype.makeArray = function () {
+        this.oUl.style.width = this.size * (this.sizeGrid + 1) + 'px';
+
+        for (var i = 0; i < this.len; i++) {
+            var oLi = document.createElement('li');
+            oLi.style.width = this.sizeGrid + 'px';
+            oLi.style.height = this.sizeGrid + 'px';
+            oLi.innerHTML = i;
+            this.arr.push(i);
+            this.oUl.appendChild(oLi);
+        }
+    };
+
+    ChangeXY.prototype.change = function (arr,size) {
+        var newArr = [];
+        var iNow = 0;
+
+        //console.log(arr);
+
+        (function () {
+            if (iNow == size) {
+                return;
+            }
+            for (var i = 0; i < arr.length; i++) {
+                if (i % size == iNow) {
+                    newArr.push(arr[i]);
+                }
+            }
+            iNow++;
+            arguments.callee();
+        })();
+        return newArr;
+    };
+
+   ChangeXY.prototype.display = function(){
+       this.arr = this.change(this.arr,this.size);
+
+       for (var i = 0; i < this.aLi.length; i++) {
+           this.aLi[i].innerHTML = this.arr[i];
+       }
+   }
+
+
+
+</script>
+</html>
