@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+<input type="button" value="10000" id="input1">
+<h1>一等奖:5‰,二等奖:3%,三等奖:80%,纪念奖(谢谢惠顾)</h1>
+<ul>
+	<li>一等奖 : <span></span></li>
+    <li>二等奖 : <span></span></li>
+    <li>三等奖 : <span></span></li>
+    <li>纪念奖 : <span></span></li>
+</ul>
+<script>
+
+var oInput = document.getElementById('input1');
+var aSpan = document.getElementsByTagName('span');
+var size = 1000;
+var arr1 = [0.005*size , 0.03*size , 0.8 * size];
+var arr2 = [];
+var num = 0;
+//console.log(arr1);
+
+//console.log(arr2);
+
+oInput.onclick = function(){
+	
+	arr2 = [];
+	num = 0;
+	
+	for(var i=0;i<arr1.length;i++){
+		num += arr1[i];
+		arr2.push({ iNow : 0 , val : num });
+	}
+	
+	var fre = parseInt(this.value);
+	var sum = 0;
+	
+	for(var i=0;i<fre;i++){
+		var val = Math.random() * size;
+		//console.log(val);
+		fnCount(val);
+	}
+	
+	for(var i=0;i<aSpan.length;i++){
+		
+		if(aSpan.length-1 == i){
+			aSpan[i].innerHTML = fre - sum;
+		}
+		else{
+			aSpan[i].innerHTML = arr2[i].iNow;
+			sum += arr2[i].iNow;
+		}
+	}
+	
+};
+
+function fnCount(val){
+	for(var i=0;i<arr2.length;i++){
+		if(arr2[i].val > val){
+			arr2[i].iNow++;
+			break;
+		}
+	}
+}
+
+</script>
+</body>
+</html>
